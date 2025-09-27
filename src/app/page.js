@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 
 export default function Page() {
   const [issues, setIssues] = useState([]);
-  const [marked, setMarked] = useState({});
-  const [filter, setFilter] = useState("ALL"); // ALL, VALID, INVALID
+  const [validIssues, setValidIssues] = useState([]);
+  const [invalidIssues, setInvalidIssues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -17,7 +17,6 @@ export default function Page() {
         else {
           console.error("GitHub API returned error:", data);
           setError(data.message || "Failed to load issues");
-          setIssues([]);
         }
         setLoading(false);
       })
@@ -28,85 +27,87 @@ export default function Page() {
       });
   }, []);
 
-  const toggleMark = (id) => {
-    setMarked((prev) => ({
-      ...prev,
-      [id]: prev[id] === "VALID" ? "INVALID" : "VALID",
-    }));
+  const markValid = (issue) => {
+    setValidIssues((prev) => [...prev, issue]);
+    setIssues((prev) => prev.filter((i) => i.id !== issue.id));
   };
 
-  const filteredIssues = issues.filter((issue) => {
-    if (filter === "ALL") return true;
-    return marked[issue.id] === filter;
-  });
+  const markInvalid = (issue) => {
+    setInvalidIssues((prev) => [...prev, issue]);
+    setIssues((prev) => prev.filter((i) => i.id !== issue.id));
+  };
 
-  if (loading) return <div className="p-8">Loading issues...</div>;
-  if (error) return <div className="p-8 text-red-500">{error}</div>;
+  if (loading) return <div className="p-8 text-center text-gray-700">Loading issues...</div>;
+  if (error) return <div className="p-8 text-center text-red-600">{error}</div>;
 
-  return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-4">GitHub Issues - Team View</h1>
-
-      <div className="mb-4">
-        <button
-          className={`px-3 py-1 mr-2 rounded ${
-            filter === "ALL" ? "bg-blue-500 text-white" : "bg-gray-200"
-          }`}
-          onClick={() => setFilter("ALL")}
-        >
-          All
-        </button>
-        <button
-          className={`px-3 py-1 mr-2 rounded ${
-            filter === "VALID" ? "bg-green-500 text-white" : "bg-gray-200"
-          }`}
-          onClick={() => setFilter("VALID")}
-        >
-          Valid
-        </button>
-        <button
-          className={`px-3 py-1 rounded ${
-            filter === "INVALID" ? "bg-red-500 text-white" : "bg-gray-200"
-          }`}
-          onClick={() => setFilter("INVALID")}
-        >
-          Invalid
-        </button>
-      </div>
-
-      <table className="w-full border-collapse border border-gray-300">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border px-2 py-1">Issue Title</th>
-            <th className="border px-2 py-1">Raised By (Team/User)</th>
-            <th className="border px-2 py-1">On Team (Repo)</th>
-            <th className="border px-2 py-1">Status</th>
-            <th className="border px-2 py-1">Action</th>
+  const renderTable = (data, includeActions = false) => (
+    <table className="min-w-full border-collapse mb-8">
+      <thead>
+        <tr className="bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-200">
+          <th className="px-4 py-2 border">Title</th>
+          <th className="px-4 py-2 border">Reporter (Team/User)</th>
+          <th className="px-4 py-2 border">Repo</th>
+          {includeActions && <th className="px-4 py-2 border">Actions</th>}
+        </tr>
+      </thead>
+      <tbody>
+        {data.length === 0 && (
+          <tr>
+            <td colSpan={includeActions ? 4 : 3} className="px-4 py-3 text-center text-gray-500">
+              No issues
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {filteredIssues.map((issue) => (
-            <tr key={issue.id} className="hover:bg-gray-50">
-              <td className="border px-2 py-1">{issue.title}</td>
-              <td className="border px-2 py-1">
-                {issue.reporterTeam} ({issue.reporter})
-              </td>
-              <td className="border px-2 py-1">{issue.repo}</td>
-              <td className="border px-2 py-1">{marked[issue.id] || "UNMARKED"}</td>
-              <td className="border px-2 py-1">
+        )}
+        {data.map((issue) => (
+          <tr
+            key={issue.id}
+            className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition transform hover:-translate-y-1 hover:shadow-lg duration-200 rounded-lg"
+          >
+            <td className="px-4 py-3 border">{issue.title}</td>
+            <td className="px-4 py-3 border">
+              {issue.reporterTeam} ({issue.reporter})
+            </td>
+            <td className="px-4 py-3 border">{issue.repo}</td>
+            {includeActions && (
+              <td className="px-4 py-3 border space-x-2">
                 <button
-                  className="bg-green-500 text-white px-2 py-1 rounded"
-                  onClick={() => toggleMark(issue.id)}
+                  className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md shadow-md transition transform hover:scale-105"
+                  onClick={() => markValid(issue)}
                 >
-                  Toggle Valid/Invalid
+                  Mark Valid
+                </button>
+                <button
+                  className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md shadow-md transition transform hover:scale-105"
+                  onClick={() => markInvalid(issue)}
+                >
+                  Mark Invalid
                 </button>
               </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            )}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
 
-      {filteredIssues.length === 0 && <p className="mt-4">No issues in this category</p>}
+  return (
+    <div className="p-8 max-w-7xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6 text-gray-900 dark:text-gray-100">GitHub Issues Dashboard</h1>
+
+      <section className="mb-10">
+        <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Unmarked Issues</h2>
+        {renderTable(issues, true)}
+      </section>
+
+      <section className="mb-10">
+        <h2 className="text-2xl font-semibold mb-4 text-green-700 dark:text-green-400">Valid Issues</h2>
+        {renderTable(validIssues)}
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-semibold mb-4 text-red-700 dark:text-red-400">Invalid Issues</h2>
+        {renderTable(invalidIssues)}
+      </section>
     </div>
   );
 }
