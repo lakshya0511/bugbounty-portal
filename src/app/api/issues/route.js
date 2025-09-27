@@ -60,7 +60,7 @@ export async function GET() {
             repo: repo.name,
             url: issue.html_url,
             state: issue.state,
-            raisedAt: issue.created_at || new Date().toISOString(), // <-- added timestamp
+            raisedAt: issue.created_at, // GitHub creation time
           }))
         : [];
     });
