@@ -1,0 +1,315 @@
+/* ---------------- CONTAINER & TABLE ---------------- */
+.il-container {
+  margin: 40px auto;
+  max-width: 1200px;
+  background: #f8fafd;
+  box-shadow: 0 6px 32px rgba(0,0,0,0.06);
+  border-radius: 18px;
+  padding: 36px 28px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  text-align: left; /* left-aligned text */
+}
+
+.il-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.066);
+}
+
+.il-table th, .il-table td {
+  padding: 18px 14px;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.il-table th {
+  background: #eef2f7;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #273246;
+  letter-spacing: 0.2px;
+  border-bottom: 2px solid #e4eaf1;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.il-table tr {
+  transition: background 0.26s;
+}
+
+.il-table tr:hover {
+  background: #f2f6fb;
+}
+
+.il-table td {
+  border-bottom: 1px solid #eceff3;
+  vertical-align: middle;
+}
+
+.il-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Set column widths for Body & GitHub link */
+.il-table td:nth-child(4),
+.il-table td:nth-child(5) {
+  width: 150px;
+}
+
+/* ---------------- DESCRIPTION LINK ---------------- */
+.il-desc-link {
+  color: #1656c1;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 500;
+  transition: color 0.24s;
+}
+
+.il-desc-link:hover {
+  color: #2b8c8d;
+}
+
+/* ---------------- NO DESCRIPTION ---------------- */
+.il-no-desc {
+  color: #bbb;
+  font-size: 0.92rem;
+}
+
+/* ---------------- GITHUB LINK ---------------- */
+.il-gh-link {
+  color: #323b4c;
+  text-decoration: none;
+  border-bottom: 1px dashed #d1dae7;
+  font-weight: 500;
+  transition: color 0.22s;
+}
+
+.il-gh-link:hover {
+  color: #276ef1;
+}
+
+/* ---------------- IMAGE THUMBNAILS ---------------- */
+.il-thumb {
+  border-radius: 7px;
+  box-shadow: 0 1px 7px rgba(0,0,0,0.09);
+  cursor: pointer;
+  margin-right: 6px;
+  transition: transform 0.18s, box-shadow 0.22s;
+  border: 2px solid #e7eefd;
+  width: 60px;
+  height: 40px;
+  object-fit: cover;
+}
+
+.il-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 6px 24px rgba(42,120,210,0.13);
+  border-color: #95b9f7;
+}
+
+/* ---------------- NO IMAGE ---------------- */
+.il-no-img {
+  color: #bbb;
+  font-size: 0.95rem;
+  font-style: italic;
+}
+
+/* ---------------- BUTTONS ---------------- */
+.il-btn {
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 0.96rem;
+  font-weight: 500;
+  border: none;
+  margin-right: 9px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  background: #f8fafd;
+  transition: background 0.18s, box-shadow 0.18s, transform 0.11s;
+  box-shadow: 0 1px 6px rgba(72,105,172,0.07);
+  user-select: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  min-width: 106px;
+}
+
+.il-btn-valid {
+  background: linear-gradient(90deg,#3fdc80 60%,#2ead69 100%);
+  color: white;
+}
+
+.il-btn-valid:hover {
+  background: linear-gradient(90deg,#44e790 40%,#229356 100%);
+  transform: translateY(-1px) scale(1.09);
+}
+
+.il-btn-invalid {
+  background: linear-gradient(90deg,#fc5d5d 60%,#b91919 100%);
+  color: white;
+}
+
+.il-btn-invalid:hover {
+  background: linear-gradient(90deg,#fd7676 40%,#920e0e 100%);
+  transform: translateY(-1px) scale(1.09);
+}
+
+.il-btn-close {
+  background: #353e4e;
+  color: #fff;
+  padding: 7px 22px;
+  margin-top: 20px;
+  font-size: 1rem;
+  border-radius: 6px;
+  user-select: none;
+}
+
+.il-btn-close:hover {
+  background: #1c2738;
+}
+
+/* ---------------- EXPORT CSV BUTTON ---------------- */
+.il-btn-export {
+  background: linear-gradient(90deg,#007bff 60%,#0056b3 100%);
+  color: white;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 0.96rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: background 0.18s, box-shadow 0.18s, transform 0.11s;
+  box-shadow: 0 1px 6px rgba(72,105,172,0.07);
+}
+
+.il-btn-export:hover {
+  background: linear-gradient(90deg,#0080ff 40%,#004aad 100%);
+  transform: translateY(-1px) scale(1.06);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* ---------------- STATUS ---------------- */
+.il-status {
+  display: inline-flex;
+  align-items: center;
+  color: #1fd17c;
+  font-weight: 800;
+  letter-spacing: 2px;
+  font-size: 1.06rem;
+  gap: 8px;
+}
+
+/* Status dot */
+.il-status-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #c7e4d6;
+  display: inline-block;
+  margin-right: 2px;
+  flex-shrink: 0;
+}
+
+.il-status-dot-valid {
+  background: linear-gradient(90deg,#30e172,#27ca5f 80%);
+  border-color: #40c860;
+}
+
+.il-status-dot-invalid {
+  background: linear-gradient(90deg,#fc6262 70%,#b91919 100%);
+  border-color: #d34a4a;
+}
+
+.il-status-dot-unreviewed {
+  background: #ededed;
+  border-color: #c6c6c6;
+}
+
+/* ---------------- LINKS STACK ---------------- */
+.il-links-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+/* ---------------- BUTTONS WRAPPER ---------------- */
+.il-btns {
+  display: flex;
+  gap: 14px;
+}
+
+/* ---------------- ICONS INSIDE BUTTON ---------------- */
+.il-btn-tick,
+.il-btn-x {
+  font-size: 1.07em;
+  padding-bottom: 2px;
+}
+
+/* ---------------- TABLE CELL PADDING & ALIGN ---------------- */
+.il-table td {
+  vertical-align: middle;
+  padding-top: 9px;
+  padding-bottom: 9px;
+}
+
+/* ---------------- MODAL STYLES ---------------- */
+.il-modal-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(38,53,71,0.33);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1111;
+}
+
+.il-modal {
+  background: white;
+  border-radius: 15px;
+  padding: 40px 32px 28px 32px;
+  box-shadow: 0 12px 64px rgba(38,68,125,0.16);
+  max-width: 580px;
+  min-width: 330px;
+  max-height: 70vh;
+  overflow-y: auto;
+  animation: il-fade-in 0.19s ease forwards;
+  user-select: text;
+}
+
+@keyframes il-fade-in {
+  from { opacity: 0; transform: scale(0.94);}
+  to   { opacity: 1; transform: scale(1);}
+}
+
+.il-modal-title {
+  margin: 0 0 12px 0;
+  color: #194c8b;
+  font-weight: 700;
+  font-size: 1.18rem;
+}
+
+.il-modal-content {
+  color: #2e3245;
+  font-size: 1.08rem;
+  margin-bottom: 12px;
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+/* Modal image */
+.il-modal-img {
+  max-width: 100%;
+  max-height: 70vh;
+  display: block;
+  margin: 0 auto;
+  border-radius: 12px;
+}
