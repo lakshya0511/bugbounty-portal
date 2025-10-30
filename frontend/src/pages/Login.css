@@ -1,0 +1,75 @@
+/* ---------------- PAGE LAYOUT ---------------- */
+.login-page {
+  height: 100vh;
+  width: 100%;
+  background: linear-gradient(135deg, #e3f2fd, #f5f8ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+/* ---------------- CARD ---------------- */
+.login-card {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  padding: 50px 60px;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.login-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.1);
+}
+
+/* ---------------- TEXT ---------------- */
+.login-title {
+  font-size: 1.8rem;
+  color: #1a3f7a;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.login-subtitle {
+  font-size: 1rem;
+  color: #4a5568;
+  margin-bottom: 30px;
+}
+
+.login-note {
+  margin-top: 18px;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+/* ---------------- BUTTON ---------------- */
+.login-btn {
+  background-color: #24292e; /* GitHub black */
+  color: #ffffff;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 12px 20px;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background-color 0.25s ease, transform 0.2s ease;
+}
+
+.login-btn:hover {
+  background-color: #000000;
+  transform: scale(1.03);
+}
+
+.github-icon {
+  font-size: 1.3rem;
+}

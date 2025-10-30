@@ -4,8 +4,8 @@
   gap: 20px;
   padding: 12px 24px;
   background: #1e293b; /* dark blue */
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border-radius: 0; /* removed rounded corners */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   margin-bottom: 20px;
 }
 

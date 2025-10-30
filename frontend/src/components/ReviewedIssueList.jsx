@@ -1,15 +1,12 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { getAllIssues, getMyIssues, updateIssueStatus } from "../services/issueService";
+import React, { useState } from "react";
 import Papa from "papaparse";
 import "./IssueList.css";
 
-const IssueList = ({ user: propUser }) => {
-  const [issues, setIssues] = useState([]);
-  const [loading, setLoading] = useState(true);
+const ReviewedIssueList = ({ issues = [], user: propUser }) => {
   const [modal, setModal] = useState({ open: false, type: "", content: "" });
 
-  // ✅ Load user + token
-  const [user, token] = React.useMemo(() => {
+  // ✅ Load user + token (for export if needed)
+  const [user] = React.useMemo(() => {
     const storedUser =
       propUser ||
       (() => {
@@ -19,57 +16,9 @@ const IssueList = ({ user: propUser }) => {
           return null;
         }
       })();
-    const storedToken = localStorage.getItem("bb_token");
-    return [storedUser, storedToken];
+    return [storedUser];
   }, [propUser]);
 
-  // ✅ Fetch issues (diff logic for reviewer vs reporter)
-  const fetchIssues = useCallback(async () => {
-    if (!user || !token) {
-      console.warn("⚠️ Missing user or token:", { user, token });
-      return;
-    }
-
-    setLoading(true);
-    console.log("🔄 Fetching issues for:", user.role, user.githubUsername);
-
-    try {
-      let data =
-        user.role === "reviewer"
-          ? await getAllIssues(token)
-          : await getMyIssues(token);
-
-      console.log("📦 Raw backend response:", data);
-
-      const finalData = Array.isArray(data)
-        ? data
-        : data?.issues || data?.data || [];
-
-      // ✅ REVIEWER → only unreviewed
-      // ✅ REPORTER → all their issues
-      const filtered =
-        user.role === "reviewer"
-          ? finalData.filter((i) => !i.status || i.status === "unreviewed")
-          : finalData;
-
-      setIssues(filtered);
-      console.log("✅ Issues set:", filtered);
-    } catch (err) {
-      console.error("❌ fetchIssues() failed:", err);
-      setIssues([]);
-    } finally {
-      setLoading(false);
-      console.log("🏁 Finished fetching issues");
-    }
-  }, [user?.role, user?.githubUsername, token]);
-
-  // ✅ Run only when login state changes
-  useEffect(() => {
-    if (!user || !token) return;
-    fetchIssues();
-  }, [fetchIssues]);
-
-  // 🧩 Helpers
   const extractImages = (body = "") => {
     const urls = [];
     const mdRegex = /!\[.*?\]\((.*?)\)/g;
@@ -82,32 +31,16 @@ const IssueList = ({ user: propUser }) => {
   const extractText = (body = "") =>
     body.replace(/!\[.*?\]\(.*?\)/g, "").replace(/<img[^>]+>/g, "").trim();
 
-  const handleStatus = async (id, status) => {
-    try {
-      await updateIssueStatus(id, status, token);
-      fetchIssues(); // refresh list
-    } catch (err) {
-      console.error("❌ Error updating issue status:", err);
-    }
-  };
-
   const exportCSV = () => {
-    const reviewed = issues.filter((i) =>
-      ["valid", "invalid"].includes(i.status)
-    );
-    if (!reviewed.length) return alert("No reviewed issues to export!");
-
-    const data = reviewed.map(({ body, ...rest }) => rest);
+    if (!issues.length) return alert("No reviewed issues to export!");
+    const data = issues.map(({ body, ...rest }) => rest);
     const csv = Papa.unparse(data);
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "issues_export.csv";
+    link.download = "reviewed_issues.csv";
     link.click();
   };
-
-  // 🕒 Loading state
-  if (loading) return <p style={{ textAlign: "center" }}>Loading issues...</p>;
 
   return (
     <div className="il-container">
@@ -126,8 +59,7 @@ const IssueList = ({ user: propUser }) => {
             <th>Body</th>
             <th>Link</th>
             <th>Screenshots</th>
-            {user?.role === "reviewer" && <th>Actions</th>}
-            {user?.role === "reporter" && <th>Status</th>}
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -190,36 +122,11 @@ const IssueList = ({ user: propUser }) => {
                         ))
                       : "No Image"}
                   </td>
-
-                  {/* REVIEWER buttons */}
-                  {user?.role === "reviewer" && (
-                    <td>
-                      <div className="il-btns">
-                        <button
-                          onClick={() => handleStatus(issue._id, "valid")}
-                          className="il-btn il-btn-valid"
-                        >
-                          ✔ Valid
-                        </button>
-                        <button
-                          onClick={() => handleStatus(issue._id, "invalid")}
-                          className="il-btn il-btn-invalid"
-                        >
-                          ✖ Invalid
-                        </button>
-                      </div>
-                    </td>
-                  )}
-
-                  {/* REPORTER status */}
-                  {user?.role === "reporter" && (
-                    <td>
-                      {issue.status
-                        ? issue.status.charAt(0).toUpperCase() +
-                          issue.status.slice(1)
-                        : "Unreviewed"}
-                    </td>
-                  )}
+                  <td>
+                    <span className={`il-status ${issue.status}`}>
+                      {issue.status?.toUpperCase() || "UNREVIEWED"}
+                    </span>
+                  </td>
                 </tr>
               );
             })
@@ -259,4 +166,4 @@ const IssueList = ({ user: propUser }) => {
   );
 };
 
-export default IssueList;
+export default ReviewedIssueList;

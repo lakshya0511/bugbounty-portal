@@ -1,0 +1,90 @@
+/* ---------------- CONTAINER & TABLE ---------------- */
+.lb-container {
+  margin: 40px auto;
+  max-width: 1200px;
+  width: 95%;
+  background: #f0f4f8;
+  box-shadow: 0 6px 32px rgba(0, 0, 0, 0.06);
+  border-radius: 18px;
+  padding: 36px 28px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  text-align: left;
+}
+
+.lb-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.066);
+}
+
+.lb-table th,
+.lb-table td {
+  padding: 18px 14px;
+  text-align: left;
+  font-size: 1rem;
+  color: #1c2a39;
+}
+
+.lb-table th {
+  background: #dbe8f8;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border-bottom: 2px solid #c3d5eb;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.lb-table tr {
+  transition: background 0.26s;
+}
+
+.lb-table tr:hover {
+  background: #e6f0fa;
+}
+
+.lb-table td {
+  border-bottom: 1px solid #e0e6ed;
+  vertical-align: middle;
+}
+
+.lb-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* ---------------- LINKS ---------------- */
+.lb-github-link {
+  color: #1a3f7a;
+  text-decoration: none;
+  border-bottom: 1px dashed #a0c1f7;
+  font-weight: 500;
+  transition: color 0.22s;
+}
+
+.lb-github-link:hover {
+  color: #276ef1;
+}
+
+/* ---------------- POINTS ---------------- */
+.lb-points {
+  font-weight: 600;
+  color: #0f7cdb;
+}
+
+/* ---------------- NO DATA ---------------- */
+.lb-no-data {
+  text-align: center;
+  padding: 16px 0;
+  color: #5f7187;
+  font-size: 0.98rem;
+}
+
+/* ---------------- RANK ---------------- */
+.lb-rank {
+  font-weight: 700;
+  color: #1c2a39;
+}

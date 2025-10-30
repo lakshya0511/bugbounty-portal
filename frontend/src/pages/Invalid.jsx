@@ -1,23 +1,36 @@
 import React, { useEffect, useState } from "react";
-import IssueList from "../components/IssueList";
+import ReviewedIssueList from "../components/ReviewedIssueList";
 import { getAllIssues } from "../services/issueService";
 
 const Invalid = () => {
   const [issues, setIssues] = useState([]);
-
-  const fetchIssues = async () => {
-    const data = await getAllIssues();
-    setIssues(data.filter((i) => i.status === "invalid"));
-  };
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
-    fetchIssues();
+    const t = localStorage.getItem("bb_token");
+    setToken(t);
   }, []);
+
+  useEffect(() => {
+    if (!token) return;
+
+    const fetchIssues = async () => {
+      try {
+        const data = await getAllIssues(token);
+        console.log("✅ All issues from backend:", data);
+        setIssues(data.filter((i) => i.status === "invalid"));
+      } catch (err) {
+        console.error("❌ Failed to load invalid issues:", err);
+      }
+    };
+
+    fetchIssues();
+  }, [token]);
 
   return (
     <div style={{ padding: "20px" }}>
       <h1>Invalid Issues</h1>
-      <IssueList issues={issues} refresh={() => {}} />
+      <ReviewedIssueList issues={issues} />
     </div>
   );
 };
